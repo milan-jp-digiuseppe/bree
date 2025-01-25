@@ -9,15 +9,32 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-navigation/native": "^7.0.14",
+    "@react-navigation/native-stack": "^7.2.0",
+    "@rneui/base": "^4.0.0-rc.7",
+    "@rneui/themed": "^4.0.0-rc.8",
+    "@types/dinero.js": "^1.9.4",
+    "date-fns": "^4.1.0",
+    "dinero.js": "^1.9.1",
     "expo": "~52.0.27",
     "expo-status-bar": "~2.0.1",
+    "imask": "^7.6.1",
     "react": "18.3.1",
-    "react-native": "0.76.6"
+    "react-native": "0.76.6",
+    "react-native-safe-area-context": "4.12.0",
+    "react-native-screens": "~4.4.0",
+    "react-native-svg": "^15.11.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
+    "@eslint/js": "^9.19.0",
     "@types/react": "~18.3.12",
-    "typescript": "^5.3.3"
+    "eslint": "^9.19.0",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-native": "^5.0.0",
+    "globals": "^15.14.0",
+    "typescript": "^5.3.3",
+    "typescript-eslint": "^8.21.0"
   },
   "private": true
 }
