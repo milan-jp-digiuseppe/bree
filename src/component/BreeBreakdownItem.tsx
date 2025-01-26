@@ -1,6 +1,18 @@
-import { Text } from "@rneui/base";
-import { StyleProp, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { theme } from "../theme";
+import BreeText from "./BreeText";
+
+const styles = StyleSheet.create({
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: theme.spacing.unit,
+  },
+  subItem: {
+    marginLeft: theme.spacing.screenPadding,
+    paddingBottom: 0,
+  },
+});
 
 interface Props {
   label: string;
@@ -17,17 +29,11 @@ const BreeBreakdownItem: React.FC<Props> = ({
 }) => {
   return (
     <View style={style}>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          paddingVertical: theme.spacing.unit,
-        }}
-      >
-        <Text h4>{label}</Text>
-        <Text h4 style={{ fontWeight: "bold" }}>
+      <View style={styles.row}>
+        <BreeText fontSize="h4">{label}</BreeText>
+        <BreeText fontSize="h4" fontWeight="bold">
           {value}
-        </Text>
+        </BreeText>
       </View>
       {!!subItems && subItems.length > 0 && (
         <>
@@ -35,10 +41,7 @@ const BreeBreakdownItem: React.FC<Props> = ({
             <BreeBreakdownItem
               key={item.label}
               {...item}
-              style={{
-                marginLeft: theme.spacing.screenPadding,
-                paddingBottom: 0,
-              }}
+              style={styles.subItem}
             />
           ))}
         </>

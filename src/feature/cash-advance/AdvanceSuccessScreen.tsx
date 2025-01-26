@@ -9,11 +9,11 @@ import {
   View,
 } from "react-native";
 import BreeScreenContainer from "../../component/BreeScreenContainer";
-import { Text } from "@rneui/base";
 import { theme } from "../../theme";
 import BreeButton from "../../component/BreeButton";
 import { useCashAdvanceContext } from "./CashAdvanceContext";
 import { centsToDinero, formatDinero } from "../../utils/money";
+import BreeText from "../../component/BreeText";
 
 const styles = StyleSheet.create({
   title: {
@@ -59,12 +59,12 @@ const AdvanceSuccessScreen = () => {
     <BreeScreenContainer enableKAV={true}>
       <View style={{ flex: 1 }}>
         <View style={styles.title}>
-          <Text h2 style={{ textAlign: "center", fontWeight: "bold" }}>
+          <BreeText fontSize="h2" fontWeight="bold" textAlign="center">
             Success!
-          </Text>
-          <Text h4 style={{ textAlign: "center" }}>
+          </BreeText>
+          <BreeText fontSize="h4" textAlign="center">
             You'll receive your cash advance in 1-2 business days
-          </Text>
+          </BreeText>
         </View>
         <Animated.View
           style={{
@@ -73,16 +73,14 @@ const AdvanceSuccessScreen = () => {
             marginTop: theme.spacing.unit6x,
           }}
         >
-          <Text
-            style={{
-              fontWeight: "bold",
-              fontSize: 90,
-              color: theme.color.blue,
-              textAlign: "center",
-            }}
+          <BreeText
+            fontSize="h1"
+            fontWeight="bold"
+            color={theme.color.blue}
+            textAlign="center"
           >
             {amountFormatted}
-          </Text>
+          </BreeText>
         </Animated.View>
       </View>
 

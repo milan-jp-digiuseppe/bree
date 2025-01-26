@@ -1,18 +1,8 @@
-import React, { PropsWithChildren } from "react";
-import {
-  Pressable,
-  StyleProp,
-  StyleSheet,
-  View,
-  ViewStyle,
-} from "react-native";
-import BreeText from "./BreeText";
-import { Button, Text } from "@rneui/base";
+import React from "react";
+import { StyleProp, ViewStyle } from "react-native";
+import { Button } from "@rneui/base";
 import { theme } from "../theme";
-
-const styles = StyleSheet.create({
-  //
-});
+import BreeText from "./BreeText";
 
 interface Props {
   title: string;
@@ -25,9 +15,9 @@ const BreeButton: React.FC<Props> = ({ title, onPress, isLoading, style }) => {
   return (
     <Button
       title={
-        <Text h4 style={{ color: theme.color.white }}>
+        <BreeText color={theme.color.white} fontSize="h4">
           {title}
-        </Text>
+        </BreeText>
       }
       onPress={onPress}
       color={theme.color.blue}

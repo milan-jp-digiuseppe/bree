@@ -30,7 +30,9 @@ const AmountScreen = () => {
   const [validationError, setValidationError] = useState("");
   const { data } = useHomeQuery();
 
+  // Bug: entering something like "100.0" will incorrectly be masked to drop the trailing ".0"
   const onChangeText = useCallback((amt: string) => {
+    // Workaround: IMask likes to remove a trailing period
     if (amt.charAt(amt.length - 1) === ".") {
       setAmount(amt);
     } else {
@@ -66,6 +68,7 @@ const AmountScreen = () => {
     >
       <ScrollView style={{ paddingHorizontal: theme.spacing.screenPadding }}>
         <Input
+          labelStyle={{ marginTop: theme.spacing.unit3x }}
           value={amount}
           onChangeText={onChangeText}
           label="Cash Advance"

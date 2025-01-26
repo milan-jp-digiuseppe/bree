@@ -40,11 +40,6 @@ const CashAdvanceStackScreen = () => {
             headerLeft: () => <Icon name="close" onPress={onFinish} />,
             headerTitle: "",
           }}
-          // options={({ navigation: navInner }) => ({
-          //   headerLeft: () => (
-          //     <Icon name="chevron-left" onPress={navInner.goBack} />
-          //   ),
-          // })}
         />
       </CashAdvanceStack.Navigator>
     </CashAdvanceContextProvider>

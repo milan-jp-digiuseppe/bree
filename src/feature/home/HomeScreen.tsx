@@ -4,10 +4,10 @@ import { ActivityIndicator, StyleSheet } from "react-native";
 import { theme } from "../../theme";
 import BreeScreenContainer from "../../component/BreeScreenContainer";
 import BreeButton from "../../component/BreeButton";
-import { Card, Text } from "@rneui/base";
+import { Card } from "@rneui/base";
 import { useHomeQuery } from "./HomeApi";
 import { centsToDinero, formatDinero } from "../../utils/money";
-import Toast from "react-native-toast-message";
+import BreeText from "../../component/BreeText";
 
 const styles = StyleSheet.create({
   screen: {
@@ -34,11 +34,8 @@ const HomeScreen = () => {
   const { data, isLoading, isError, refetch } = useHomeQuery();
 
   const onPressCashAdvance = useCallback(() => {
-    // Toast.show({
-    //   text1: "Something went wrong",
-    // });
     navigation.navigate("CashAdvanceStack");
-  }, []);
+  }, [navigation]);
 
   if (isLoading) {
     return (
@@ -51,14 +48,9 @@ const HomeScreen = () => {
   if (isError) {
     return (
       <BreeScreenContainer style={styles.error}>
-        <Text
-          h4
-          style={{
-            textAlign: "center",
-          }}
-        >
+        <BreeText fontSize="h4" textAlign="center">
           Something went wrong. Please try again
-        </Text>
+        </BreeText>
         <BreeButton title="Retry" onPress={refetch} />
       </BreeScreenContainer>
     );
@@ -66,9 +58,9 @@ const HomeScreen = () => {
 
   return (
     <BreeScreenContainer style={styles.screen}>
-      <Text h2 style={{ fontWeight: "500" }}>
+      <BreeText fontSize="h3" fontWeight="medium">
         Welcome, {data!.user.firstName}
-      </Text>
+      </BreeText>
       <Card containerStyle={{ marginTop: 15 }}>
         <Card.Title
           h3
@@ -80,12 +72,12 @@ const HomeScreen = () => {
           Cash Advance Limit
         </Card.Title>
         <Card.Divider />
-        <Text h1 style={{ textAlign: "center", fontWeight: "bold" }}>
+        <BreeText fontSize="h2" fontWeight="bold" textAlign="center">
           {formatDinero(centsToDinero(data!.cashAdvancePolicy.limit))}
-        </Text>
-        <Text style={{ textAlign: "center" }}>
+        </BreeText>
+        <BreeText textAlign="center">
           Pay back in {data!.cashAdvancePolicy.paybackDuration} days
-        </Text>
+        </BreeText>
       </Card>
       <BreeButton
         title="Get Cash Now"

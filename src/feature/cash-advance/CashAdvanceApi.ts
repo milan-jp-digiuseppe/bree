@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { sleep } from "../../utils/api";
 
 interface RequestCashAdvanceRequest {
@@ -14,8 +14,7 @@ export const useRequestCashAdvanceMutation = () => {
     mutationFn: async (
       req: RequestCashAdvanceRequest
     ): Promise<RequestCashAdvanceResponse> => {
-      await sleep(500);
-      // throw new Error("whoops");
+      await sleep(1000);
       return {};
     },
   });
