@@ -48,7 +48,7 @@ const AmountScreen = () => {
       return;
     }
     const amountCents = parseFloat(mask.unmaskedValue) * 100;
-    if (amountCents >= data!.cashAdvancePolicy.limit) {
+    if (amountCents > data!.cashAdvancePolicy.limit) {
       setValidationError(
         `Must be less than limit of ${formatDinero(
           centsToDinero(data!.cashAdvancePolicy.limit)
