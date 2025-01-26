@@ -1,34 +1,50 @@
-import { useCallback } from "react";
-import { Button, SafeAreaView, ScrollView, View } from "react-native";
+import { useCallback, useState } from "react";
+import { ScrollView } from "react-native";
 import { useCashAdvanceContext } from "./CashAdvanceContext";
 import BreeScreenContainer from "../../component/BreeScreenContainer";
 import BreeButton from "../../component/BreeButton";
 import { theme } from "../../theme";
-import { Divider, Text } from "@rneui/base";
 import BreeBreakdownItem from "../../component/BreeBreakdownItem";
 import BreeSectionTitle from "../../component/BreeSectionTitle";
-import { addDays, format } from "date-fns";
+import { addDays } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
-import Dinero from "dinero.js";
 import { centsToDinero, formatDinero } from "../../utils/money";
 import { formatDate } from "../../utils/date";
-
-const COST_PER_100_BORROWED_DOLLARS = 15;
+import { useHomeQuery } from "../home/HomeApi";
+import { useRequestCashAdvanceMutation } from "./CashAdvanceApi";
+import Toast, { ErrorToast } from "react-native-toast-message";
 
 const SummaryScreen = () => {
   const navigator = useNavigation();
   const { amountCents } = useCashAdvanceContext();
+  const { data } = useHomeQuery();
+  const { mutateAsync: requestCashAdvance } = useRequestCashAdvanceMutation();
+  const [isLoading, setIsLoading] = useState(false);
 
   const requestedAmountDinero = centsToDinero(amountCents);
   const borrowingCostDinero = requestedAmountDinero
     .divide(100)
-    .multiply(COST_PER_100_BORROWED_DOLLARS);
+    .multiply(data!.cashAdvancePolicy.costPerHunderDollarsBorrowed / 100);
   const repayAmountDinero = requestedAmountDinero.add(borrowingCostDinero);
 
   const paybackDate = addDays(new Date(), 14);
 
-  const onSubmit = useCallback(() => {
-    navigator.navigate("AdvanceSuccess");
+  const onSubmit = useCallback(async () => {
+    setIsLoading(true);
+    try {
+      await requestCashAdvance({ amount: amountCents });
+      navigator.navigate("AdvanceSuccess");
+    } catch (err) {
+      Toast.show({
+        text1: "Something went wrong",
+        text2: "Please try again later",
+        autoHide: false,
+        topOffset: theme.spacing.unit,
+        type: "error",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   return (
@@ -50,7 +66,9 @@ const SummaryScreen = () => {
             {
               label: "Cost per $100 borrowed",
               value: formatDinero(
-                centsToDinero(COST_PER_100_BORROWED_DOLLARS * 100)
+                centsToDinero(
+                  data!.cashAdvancePolicy.costPerHunderDollarsBorrowed
+                )
               ),
             },
             {
@@ -65,15 +83,24 @@ const SummaryScreen = () => {
         />
 
         <BreeSectionTitle title="Payback schedule" />
-        <BreeBreakdownItem label="14 days" value={formatDate(paybackDate)} />
+        <BreeBreakdownItem
+          label={`${data!.cashAdvancePolicy.paybackDuration} days`}
+          value={formatDate(paybackDate)}
+        />
       </ScrollView>
 
       <BreeButton
         title="Submit"
         onPress={onSubmit}
+        isLoading={isLoading}
         style={{
           marginHorizontal: theme.spacing.screenPadding,
           marginBottom: theme.spacing.screenPadding,
+        }}
+      />
+      <Toast
+        config={{
+          error: ErrorToast,
         }}
       />
     </BreeScreenContainer>

@@ -6,7 +6,9 @@ import { Input } from "@rneui/base";
 import { theme } from "../../theme";
 import BreeButton from "../../component/BreeButton";
 import { useCashAdvanceContext } from "./CashAdvanceContext";
-import IMask, { MaskedPattern } from "imask";
+import IMask from "imask";
+import { useHomeQuery } from "../home/HomeApi";
+import { centsToDinero, formatDinero } from "../../utils/money";
 
 const mask = new IMask.MaskedPattern({
   mask: "$num",
@@ -26,6 +28,7 @@ const AmountScreen = () => {
   const { setAmountCents } = useCashAdvanceContext();
   const [amount, setAmount] = useState("");
   const [validationError, setValidationError] = useState("");
+  const { data } = useHomeQuery();
 
   const onChangeText = useCallback((amt: string) => {
     if (amt.charAt(amt.length - 1) === ".") {
@@ -43,9 +46,12 @@ const AmountScreen = () => {
       return;
     }
     const amountCents = parseFloat(mask.unmaskedValue) * 100;
-    // TODO: pull advance limit
-    if (amountCents >= 500_00) {
-      setValidationError("Must be less than limit of $500.00");
+    if (amountCents >= data!.cashAdvancePolicy.limit) {
+      setValidationError(
+        `Must be less than limit of ${formatDinero(
+          centsToDinero(data!.cashAdvancePolicy.limit)
+        )}`
+      );
       return;
     }
 
@@ -67,6 +73,7 @@ const AmountScreen = () => {
           containerStyle={{ marginTop: theme.spacing.unit2x }}
           placeholder="$0"
           errorMessage={validationError}
+          autoFocus={true}
         />
       </ScrollView>
       <BreeButton

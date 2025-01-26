@@ -1,4 +1,3 @@
-import { Button, SafeAreaView, Text } from "react-native";
 import AmountScreen from "./AmountScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useNavigation } from "@react-navigation/native";
@@ -6,34 +5,47 @@ import SummaryScreen from "./SummaryScreen";
 import { Icon } from "@rneui/base";
 import CashAdvanceContextProvider from "./CashAdvanceContext";
 import AdvanceSuccessScreen from "./AdvanceSuccessScreen";
+import { useCallback } from "react";
 
 const CashAdvanceStack = createNativeStackNavigator();
 const CashAdvanceStackScreen = () => {
+  const navigation = useNavigation();
+
+  // This will unmount the whole stack since the useNavigation hook is mounted above the stack
+  const onFinish = useCallback(() => navigation.goBack(), []);
+
   return (
-    <CashAdvanceContextProvider>
+    <CashAdvanceContextProvider onFinish={onFinish}>
       <CashAdvanceStack.Navigator>
         <CashAdvanceStack.Screen
           name="Amount"
           component={AmountScreen}
-          options={({ navigation }) => ({
-            headerLeft: () => <Icon name="close" onPress={navigation.goBack} />,
+          options={({ navigation: navInner }) => ({
+            headerLeft: () => <Icon name="close" onPress={navInner.goBack} />,
           })}
         />
         <CashAdvanceStack.Screen
           name="Summary"
           component={SummaryScreen}
-          options={({ navigation }) => ({
+          options={({ navigation: navInner }) => ({
             headerLeft: () => (
-              <Icon name="chevron-left" onPress={navigation.goBack} />
+              <Icon name="chevron-left" onPress={navInner.goBack} />
             ),
           })}
         />
-        {/* TODO: put in modal group */}
         <CashAdvanceStack.Screen
           name="AdvanceSuccess"
           component={AdvanceSuccessScreen}
+          options={{
+            headerLeft: () => <Icon name="close" onPress={onFinish} />,
+            headerTitle: "",
+          }}
+          // options={({ navigation: navInner }) => ({
+          //   headerLeft: () => (
+          //     <Icon name="chevron-left" onPress={navInner.goBack} />
+          //   ),
+          // })}
         />
-        {/* <CashAdvanceStack.Screen name="AdvanceFailed" component={AdvanceFailedScreen} /> */}
       </CashAdvanceStack.Navigator>
     </CashAdvanceContextProvider>
   );

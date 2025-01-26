@@ -16,12 +16,12 @@ const styles = StyleSheet.create({
 
 interface Props {
   title: string;
-  variant?: "primary" | "secondary";
   onPress?: () => void;
+  isLoading?: boolean;
   style?: StyleProp<ViewStyle>;
 }
 
-const BreeButton: React.FC<Props> = ({ title, variant, onPress, style }) => {
+const BreeButton: React.FC<Props> = ({ title, onPress, isLoading, style }) => {
   return (
     <Button
       title={
@@ -32,6 +32,7 @@ const BreeButton: React.FC<Props> = ({ title, variant, onPress, style }) => {
       onPress={onPress}
       color={theme.color.blue}
       radius={theme.borderRadius}
+      loading={isLoading}
       style={style}
     />
   );
